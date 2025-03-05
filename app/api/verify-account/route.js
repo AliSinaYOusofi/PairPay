@@ -13,7 +13,6 @@ export async function POST(request) {
             );
         }
 
-        // Verify the OTP token using Supabase Auth
         console.log(token, type);
         const { error } = await supabase.auth.verifyOtp({
             token_hash: token,
