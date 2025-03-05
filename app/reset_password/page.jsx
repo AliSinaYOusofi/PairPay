@@ -7,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function ResetPasswordPage() {
+export default function page() {
     return (
         <div className="container flex h-screen items-center justify-center">
             <Card className="mx-auto w-full max-w-md">

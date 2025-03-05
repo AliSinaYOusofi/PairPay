@@ -1,5 +1,4 @@
 import ChangePassword from "@/components/ChangePassword";
-import UpdatePasswordForm from "@/components/ResetPasswordForm";
 import {
     Card,
     CardContent,
@@ -8,7 +7,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 
-export default function UpdatePasswordPage() {
+export default function page() {
     return (
         <div className="container flex h-screen items-center justify-center">
             <Card className="mx-auto w-full max-w-md">

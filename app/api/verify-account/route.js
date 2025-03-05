@@ -1,22 +1,7 @@
 // app/api/verify-account/route.js
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase"; // Adjust the path as needed
+import { supabase } from "@/lib/supabase";
 
-/**
- * POST /api/verify-account
- * Verifies a one-time password (OTP) token for account verification.
- *
- * Request Body:
- * {
- *   token: string,
- *   type: string
- * }
- *
- * Response:
- * - 200: { success: true, message: "Account verified successfully" }
- * - 400: { error: "Missing required parameters" } or { error: error.message }
- * - 500: { error: "An unexpected error occurred" }
- */
 export async function POST(request) {
     try {
         const { token, type } = await request.json();
