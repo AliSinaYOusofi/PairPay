@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
 export default function ResetPasswordForm() {
@@ -34,22 +33,7 @@ export default function ResetPasswordForm() {
 
     const checkEmailExists = async (email) => {
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password: "checkingIfUserExists123!", // This password is intentionally wrong
-            });
-
-            if (
-                error &&
-                (error.message.includes("Invalid login credentials") ||
-                    error.message.includes("Email not confirmed"))
-            ) {
-                return true;
-            } else if (error && error.message.includes("User not found")) {
-                return false;
-            }
-
-            return true;
+            
         } catch (error) {
             console.error("Error checking if email exists:", error);
             return true;
