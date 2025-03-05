@@ -15,7 +15,6 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Loader2, Home } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
 export default function ChangePassword() {
@@ -69,32 +68,9 @@ export default function ChangePassword() {
         setIsLoading(true);
         try {
 
-            // Update the user's password
-            const email = localStorage.getItem("email")
-
-            if (! email) {
-                return toast.error("Email not found", {
-                    description: "Please try again.",
-                })
-            }
-            const { error } = await supabase.auth.updateUser({
-                password: password,
-            });
-
-            if (error) {
-                throw error;
-            }
-
-            toast.success("Password updated successfully", {
-                description: "Your password has been changed.",
-            });
-
-            // Clear the form
             setPassword("");
             setConfirmPassword("");
 
-            // Optional: redirect to profile or settings page
-            // router.push("/profile");
         } catch (error) {
             console.error("Error updating password:", error);
             toast.error("Failed to update password", {
