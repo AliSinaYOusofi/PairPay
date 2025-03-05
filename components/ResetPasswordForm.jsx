@@ -14,12 +14,12 @@ export default function ResetPasswordForm() {
     const [emailError, setEmailError] = useState("");
     const router = useRouter();
 
-    useEffect( () => {
+    useEffect(() => {
         const email = localStorage.getItem("email");
         if (!email) {
-            router.push("/reset_password")
+            router.push("/reset_password");
         }
-    })
+    });
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!email) {
@@ -31,19 +31,33 @@ export default function ResetPasswordForm() {
         return "";
     };
 
-    const checkEmailExists = async (email) => {
+    const checkEmailAndRequestPasswordReset = async (email) => {
         try {
-            
+            const response = await fetch("/api/check_email", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json(); // Read response once
+
+            if (!response.ok) {
+                throw new Error(data.error || "Unknown error occurred");
+            }
+
+            return data
         } catch (error) {
             console.error("Error checking if email exists:", error);
-            return true;
+            toast.error("Failed to check email", {
+                description: error.message || "An unknown error occurred",
+            });
+            return false;
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate email
         const error = validateEmail(email);
         if (error) {
             setEmailError(error);
@@ -52,43 +66,14 @@ export default function ResetPasswordForm() {
 
         setIsLoading(true);
         try {
-            
-            const emailExists = await checkEmailExists(email);
+            const response_data = await checkEmailAndRequestPasswordReset(email);
 
-            if (!emailExists) {
-                toast.error("Account not found", {
-                    description: "No account exists with this email address.",
-                });
-                setIsLoading(false);
-                return;
-            }
+            console.log(response_data, ' the data')
 
-            // Since you don't have an SMTP server, we'll simulate the password reset process
-            // In a real application, you would use the following code:
-            /*
-            const { error } = await supabase.auth.resetPasswordForEmail(
-                email,
-                {
-                    redirectTo: `${window.location.origin}/update-password`,
-                }
-            );
-
-            if (error) {
-                throw error;
-            }
-            */
-
-
-            localStorage.setItem("email", email);
-
-            router.push("/update_password");
         } catch (error) {
             console.error("Error resetting password:", error);
             toast.error("Failed to send reset email", {
-                description:
-                    error instanceof Error
-                        ? error.message
-                        : "An unknown error occurred",
+                description: error.message || "An unknown error occurred",
             });
         } finally {
             setIsLoading(false);
