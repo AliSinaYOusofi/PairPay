@@ -1,5 +1,5 @@
 // app/api/verify-account/route.js
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(request) {
@@ -13,7 +13,6 @@ export async function POST(request) {
             );
         }
 
-        console.log(token, type);
         const { error } = await supabase.auth.verifyOtp({
             token_hash: token,
             type: type,

@@ -14,6 +14,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import AppLink from "./AppLink";
 
 export default function AccountConfirmation() {
     const [status, setStatus] = useState("loading");
@@ -27,6 +28,8 @@ export default function AccountConfirmation() {
                 // Get the token and type from URL parameters
                 const token = searchParams.get("token");
                 const type = searchParams.get("type");
+                
+                console.log(token, type, 'token and type')
 
                 if (!token || !type) {
                     setStatus("error");
@@ -36,7 +39,6 @@ export default function AccountConfirmation() {
                     return;
                 }
 
-                // Call the server-side route to verify the token
                 const response = await fetch("/api/verify-account", {
                     method: "POST",
                     headers: {
@@ -46,7 +48,6 @@ export default function AccountConfirmation() {
                 });
 
                 const data = await response.json();
-
                 if (!response.ok) {
                     throw new Error(data.error || "Failed to verify account");
                 }
@@ -190,13 +191,13 @@ export default function AccountConfirmation() {
 
                     {status === "success" && (
                         <Button asChild className="w-full">
-                            <Link
-                                href="/login"
+                            <AppLink
+                                path="/login"
                                 className="flex items-center justify-center"
                             >
                                 Continue to Login{" "}
                                 <ArrowRight className="ml-2 h-4 w-4" />
-                            </Link>
+                            </AppLink>
                         </Button>
                     )}
 
