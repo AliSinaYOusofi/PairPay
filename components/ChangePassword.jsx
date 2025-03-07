@@ -69,16 +69,16 @@ export default function ChangePassword() {
             const response = await fetch("/api/update_password", {
                 method: "POST",
                 headers: {
-                    "Content-type" : "application/json"
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify({
-                    password,
-                    confirmPassword,
-                })
+                body: JSON.stringify({ password, confirmPassword})
             })
+            console.log(response, 'res')
             if (!response.ok) {
                 throw new Error("Failed to update password");
             }
+            const json = await response.json();
+            console.log(json, "json")
             toast.success("Password updated successfully", {
                 description: "You can now login with your new password",
             });

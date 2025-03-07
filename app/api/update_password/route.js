@@ -1,18 +1,33 @@
 import { supabase } from "@/lib/supabase";
-
-export async function POST(req, res) {
+import { NextResponse } from "next/server";
+export async function POST(req) {
     
-    const { password, confirmPassword } = req.json();
+    const { password, confirmPassword } = await req.json();
 
+    console.log(password, 'req.json()')
     try {
         if (! password  || ! confirmPassword) {
             return NextResponse.json(
-                { error: "Insufficient data provided" },
+                { message: "Insufficient data provided" },
+                { status: 400 }
+            );
+        }
+
+        else if (password !== confirmPassword) {
+            return NextResponse.json(
+                { error: "Passwords do not match" },
+                { status: 400 }
+            );
+        }
+
+        else if (password.length < 6 || confirmPassword.length < 6) {
+            return NextResponse.json(
+                { error: "Password must be at least 6 characters long" },
                 { status: 400 }
             );
         }
         
-
+        let email = 'tinayousofiali@gmail.com'
         const { error: updateUserError } = await supabase
             .from("users")
             .update({password})
@@ -27,11 +42,11 @@ export async function POST(req, res) {
         }
     
         const { data, error } = await supabase.auth.updateUser({
-            email,
             password,
         });
-    
+
         if (error) {
+            console.log("how can you do that", error)
             return NextResponse.json(
                 { message: "Failed to update password" },
                 { status: 500 }
@@ -49,6 +64,4 @@ export async function POST(req, res) {
             { status: 500 }
         );
     }
-
-    console.log(data, error);
 }
