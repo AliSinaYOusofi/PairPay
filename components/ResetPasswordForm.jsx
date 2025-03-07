@@ -8,10 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-export default function ResetPasswordForm() {
+export default function SendPasswordResetEmailComp() {
     const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [emailSuccess, setEmailSuccess] = useState('')
     const router = useRouter();
 
     useEffect(() => {
@@ -33,7 +34,7 @@ export default function ResetPasswordForm() {
 
     const checkEmailAndRequestPasswordReset = async (email) => {
         try {
-            const response = await fetch("/api/check_email", {
+            const response = await fetch("/api/send_email_verification", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email }),
@@ -66,9 +67,23 @@ export default function ResetPasswordForm() {
 
         setIsLoading(true);
         try {
+            
             const response_data = await checkEmailAndRequestPasswordReset(email);
+            
+            if (!response_data) {
+                toast.error("Failed to send reset email", {
+                    description: "An unknown error occurred",
+                    duration: Infinity
+                });
+                return;
+            }
 
-            console.log(response_data, ' the data')
+            toast.success("Reset email sent successfully", {
+                description: "Please check your email for the reset link",
+                duration: Infinity
+            });
+
+            setEmailSuccess("Email verfication was sent to you email. Check your email and also spam folder. It may take a few minutes to arrive.")
 
         } catch (error) {
             console.error("Error resetting password:", error);
@@ -98,6 +113,10 @@ export default function ResetPasswordForm() {
                 {emailError && (
                     <p className="text-sm text-red-500">{emailError}</p>
                 )}
+
+                {
+                    emailSuccess && <p className="text-sm text-green-500">{emailSuccess}</p>
+                }
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (

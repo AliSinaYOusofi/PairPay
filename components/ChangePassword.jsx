@@ -48,14 +48,12 @@ export default function ChangePassword() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate password
         const passwordValidationError = validatePassword(password);
         if (passwordValidationError) {
             setPasswordError(passwordValidationError);
             return;
         }
 
-        // Validate confirm password
         const confirmPasswordValidationError = validateConfirmPassword(
             confirmPassword,
             password
@@ -67,6 +65,23 @@ export default function ChangePassword() {
 
         setIsLoading(true);
         try {
+
+            const response = await fetch("/api/update_password", {
+                method: "POST",
+                headers: {
+                    "Content-type" : "application/json"
+                },
+                body: JSON.stringify({
+                    password,
+                    confirmPassword,
+                })
+            })
+            if (!response.ok) {
+                throw new Error("Failed to update password");
+            }
+            toast.success("Password updated successfully", {
+                description: "You can now login with your new password",
+            });
 
             setPassword("");
             setConfirmPassword("");

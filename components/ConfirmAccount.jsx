@@ -195,7 +195,7 @@ export default function AccountConfirmation() {
                                 path="/login"
                                 className="flex items-center justify-center"
                             >
-                                Continue to Login{" "}
+                                You can close this window now{" "}
                                 <ArrowRight className="ml-2 h-4 w-4" />
                             </AppLink>
                         </Button>
