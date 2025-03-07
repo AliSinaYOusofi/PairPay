@@ -78,32 +78,7 @@ export const metadata = {
         statusBarStyle: "default",
     },
     manifest: "https://pair-pay.vercel.app/manifest.json",
-    icons: {
-        icon: [
-            { url: "/favicon.ico" },
-            { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-            { url: "/favicon-16x16.png", sizes: "32x32", type: "image/png" },
-            { url: "/favicon-16x16.png", sizes: "192x192", type: "image/png" },
-            { url: "/favicon-16x16.png", sizes: "512x512", type: "image/png" },
-        ],
-        apple: [
-            { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
-        ],
-        other: [
-            {
-                rel: "mask-icon",
-                url: "/safari-pinned-tab.svg",
-                color: "#4F46E5",
-            },
-        ],
-    },
-    // Verification for search engines
-    verification: {
-        google: "your-google-site-verification-code", // Replace with your verification code
-        yandex: "your-yandex-verification-code", // If applicable
-        bing: "your-bing-verification-code", // If applicable
-    },
-    // Alternate languages if you support multiple languages
+    
     alternates: {
         canonical: "https://pair-pay.vercel.app",
         languages: {
@@ -118,6 +93,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <head>
+                <link rel="icon" href="./favicon.ico" />
+            </head>
             <body className={inter.className}>
                 {children}
                 <Toaster />

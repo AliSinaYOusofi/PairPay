@@ -63,7 +63,19 @@ export default function ChangePassword() {
             return;
         }
 
+        const token = searchParams.get("token");
+        const email = searchParams.get("email");
+
+        if (!token || !type) {
+            setStatus("error");
+            setErrorMessage(
+                "Invalid confirmation link. Missing parameters."
+            );
+            return;
+        }
+
         setIsLoading(true);
+        
         try {
 
             const response = await fetch("/api/update_password", {
@@ -71,7 +83,7 @@ export default function ChangePassword() {
                 headers: {
                     "Content-Type" : "application/json"
                 },
-                body: JSON.stringify({ password, confirmPassword})
+                body: JSON.stringify({ password, confirmPassword, token, email,})
             })
             console.log(response, 'res')
             if (!response.ok) {
