@@ -1,17 +1,50 @@
 import { supabase } from "@/lib/supabase";
-
-export async function POST(req, res) {
+import { NextResponse } from "next/server";
+export async function POST(req) {
     
-    const { password, confirmPassword } = req.json();
+    const { password, confirmPassword, token, email } = await req.json();
 
+    console.log(password, confirmPassword, token, email, 'password, confirmPassword, token, email')
     try {
         if (! password  || ! confirmPassword) {
             return NextResponse.json(
-                { error: "Insufficient data provided" },
+                { message: "Insufficient data provided" },
                 { status: 400 }
             );
         }
-        
+
+        else if (!token || !email) {
+            return NextResponse.json(
+                { error: "Invalid confirmation link. Missing parameters." },
+                { status: 400 }
+            );
+        }
+
+        else if (password !== confirmPassword) {
+            return NextResponse.json(
+                { error: "Passwords do not match" },
+                { status: 400 }
+            );
+        }
+
+        else if (password.length < 6 || confirmPassword.length < 6) {
+            return NextResponse.json(
+                { error: "Password must be at least 6 characters long" },
+                { status: 400 }
+            );
+        }
+    
+        const { data, error } = await supabase.auth.updateUser({
+            password,
+            token
+        });
+
+        if (error) {
+            return NextResponse.json(
+                { message: "Failed to update password" },
+                { status: 500 }
+            );
+        }
 
         const { error: updateUserError } = await supabase
             .from("users")
@@ -20,18 +53,6 @@ export async function POST(req, res) {
             .single()
         
         if (updateUserError) {
-            return NextResponse.json(
-                { message: "Failed to update password" },
-                { status: 500 }
-            );
-        }
-    
-        const { data, error } = await supabase.auth.updateUser({
-            email,
-            password,
-        });
-    
-        if (error) {
             return NextResponse.json(
                 { message: "Failed to update password" },
                 { status: 500 }
@@ -49,6 +70,4 @@ export async function POST(req, res) {
             { status: 500 }
         );
     }
-
-    console.log(data, error);
 }

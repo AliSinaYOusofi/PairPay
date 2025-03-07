@@ -63,22 +63,34 @@ export default function ChangePassword() {
             return;
         }
 
+        const token = searchParams.get("token");
+        const email = searchParams.get("email");
+
+        if (!token || !type) {
+            setStatus("error");
+            setErrorMessage(
+                "Invalid confirmation link. Missing parameters."
+            );
+            return;
+        }
+
         setIsLoading(true);
+        
         try {
 
             const response = await fetch("/api/update_password", {
                 method: "POST",
                 headers: {
-                    "Content-type" : "application/json"
+                    "Content-Type" : "application/json"
                 },
-                body: JSON.stringify({
-                    password,
-                    confirmPassword,
-                })
+                body: JSON.stringify({ password, confirmPassword, token, email,})
             })
+            console.log(response, 'res')
             if (!response.ok) {
                 throw new Error("Failed to update password");
             }
+            const json = await response.json();
+            console.log(json, "json")
             toast.success("Password updated successfully", {
                 description: "You can now login with your new password",
             });
