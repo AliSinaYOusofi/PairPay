@@ -1,4 +1,4 @@
-import UpdatePasswordForm from "@/components/ResetPasswordForm";
+import SendPasswordResetEmailComp from "@/components/ResetPasswordForm";
 import {
     Card,
     CardContent,
@@ -20,7 +20,7 @@ export default function page() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <UpdatePasswordForm />
+                    <SendPasswordResetEmailComp />
                 </CardContent>
             </Card>
         </div>
